@@ -1,0 +1,45 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/thanhdat4461/OrionMoblie/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "Nogrus Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+
+local value = false
+
+local MiscTab = Window:MakeTab({
+	Name = "Misc",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = MiscTab:AddSection({
+	Name = "No Cooldown"
+})
+
+MiscTab:AddButton({
+	Name = "Teleport No Cooldown",
+	Callback = function()
+      		local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ClickToTeleportEvent = ReplicatedStorage:WaitForChild("ClickToTeleportEvent")
+
+local function onClick(input, gameProcessed)
+    -- Check for mouse click or touch tap
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        local mousePosition = input.Position
+        local camera = workspace.CurrentCamera
+        local mouseRay = camera:ScreenPointToRay(mousePosition.X, mousePosition.Y)
+        local raycastParams = RaycastParams.new()
+        raycastParams.FilterDescendantsInstances = {camera}
+
+        local raycastResult = workspace:Raycast(mouseRay.Origin, mouseRay.Direction * 5000, raycastParams)
+        if raycastResult then
+            local hitPosition = raycastResult.Position
+            local args = {
+                [1] = hitPosition
+            }
+            ClickToTeleportEvent:FireServer(unpack(args))
+        end
+    end
+end
+
+UserInputService.InputBegan:Connect(onClick)
+  	end    
+})
